@@ -257,10 +257,32 @@ const deleteMember = async (req, res) => {
   }
 };
 
+// 🔵 Get total members count for a gym owner
+const getTotalMembersCount = async (req, res) => {
+  try {
+    const gymOwnerId = req.gymOwner.id;
+
+    const totalMembers = await Member.countDocuments({ gymOwnerId });
+
+    res.status(200).json({
+      success: true,
+      message: "Total members count fetched successfully",
+      totalMembers,
+    });
+  } catch (error) {
+    console.error("Get total members count error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error while fetching total members count",
+    });
+  }
+};
+
 module.exports = {
   createMember,
   getMembers,
   getMemberById,
   updateMember,
   deleteMember,
+  getTotalMembersCount,
 };

@@ -7,6 +7,7 @@ const {
   getMemberById,
   updateMember,
   deleteMember,
+  getTotalMembersCount,
 } = require("../controllers/memberController");
 const { authenticateGymOwner } = require("../middlewares/authMiddleware");
 
@@ -38,5 +39,8 @@ router.put(
 
 // ✅ Delete a member by ID
 router.delete("/delete-member/:id", authenticateGymOwner, deleteMember);
+
+// ✅ Get total members count
+router.get("/total-members", authenticateGymOwner, getTotalMembersCount);
 
 module.exports = router;
