@@ -35,14 +35,14 @@ const memberSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    membership: {
-      type: String,
-      required: true,
-      trim: true,
-    },
     profileImage: {
-      type: String,
-      default: "",
+      type: String, // URL or file path
+      default: null, // Not required
+    },
+    membership: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Plan", // Connected to the Plan model
+      required: true,
     },
     gymOwnerId: {
       type: mongoose.Schema.Types.ObjectId,

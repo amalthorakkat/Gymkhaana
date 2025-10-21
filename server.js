@@ -5,6 +5,7 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const planRoutes = require("./routes/planRoutes");
+const memberRoutes = require("./routes/memberRoutes");
 
 const { authenticateGymOwner } = require("./middlewares/authMiddleware");
 
@@ -38,6 +39,7 @@ connectDB();
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/plans", planRoutes);
+app.use("/api/members", memberRoutes);
 
 // Protected test route (optional)
 app.get("/api/test-protected", authenticateGymOwner, (req, res) => {
