@@ -6,6 +6,8 @@ const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const planRoutes = require("./routes/planRoutes");
 const memberRoutes = require("./routes/memberRoutes");
+const subscriptionRoutes = require("./routes/subscriptionRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 
 const { authenticateGymOwner } = require("./middlewares/authMiddleware");
 
@@ -37,9 +39,11 @@ app.get("/api/health", (req, res) => {
 connectDB();
 
 // Routes
+app.use("/api/admin", adminRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/plans", planRoutes);
 app.use("/api/members", memberRoutes);
+app.use("/api/subscription", subscriptionRoutes);
 
 // Protected test route (optional)
 app.get("/api/test-protected", authenticateGymOwner, (req, res) => {

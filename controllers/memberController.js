@@ -1,6 +1,8 @@
+const mongoose = require("mongoose");
 const Member = require("../models/Member");
 const Plan = require("../models/Plan");
 const cloudinary = require("../config/cloudinary");
+const GymOwner = require("../models/GymOwner");
 
 // 🟢 Create Member
 const createMember = async (req, res) => {
@@ -278,6 +280,53 @@ const getTotalMembersCount = async (req, res) => {
   }
 };
 
+// 🟢 Get All Members for a Specific Gym Owner (Admin Only)
+const getMembersByGymOwner = async (req, res) => {
+  try {
+    const { gymOwnerId } = req.params;
+
+    // Validate ObjectId
+    if (!mongoose.isValidObjectId(gymOwnerId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid gym owner ID format",
+      });
+    }
+
+    // Validate gym owner exists
+    const gymOwner = await GymOwner.findById(gymOwnerId);
+    if (!gymOwner) {
+      return res.status(404).json({
+        success: false,
+        message: "Gym owner not found",
+      });
+    }
+
+    const members = await Member.find({ gymOwnerId })
+      .populate("membership")
+      .sort({ createdAt: -1 })
+      .select("-__v");
+
+    res.status(200).json({
+      success: true,
+      message: `Members for gym owner ${gymOwner.gymName} fetched successfully`,
+      gymOwner: {
+        id: gymOwner._id,
+        gymName: gymOwner.gymName,
+        email: gymOwner.email,
+      },
+      members,
+      count: members.length,
+    });
+  } catch (error) {
+    console.error("Get members by gym owner error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error while fetching members for gym owner",
+    });
+  }
+};
+
 module.exports = {
   createMember,
   getMembers,
@@ -285,4 +334,5 @@ module.exports = {
   updateMember,
   deleteMember,
   getTotalMembersCount,
+  getMembersByGymOwner,
 };

@@ -22,7 +22,7 @@ router.post(
   upload.single("profileImage"),
   createMember
 );
-
+ 
 // ✅ Get all members for the logged-in gym owner
 router.get("/get-members", authenticateGymOwner, getMembers);
 
@@ -35,7 +35,7 @@ router.put(
   authenticateGymOwner,
   upload.single("profileImage"), // Add multer middleware for profileImage
   updateMember
-);
+);  
 
 // ✅ Delete a member by ID
 router.delete("/delete-member/:id", authenticateGymOwner, deleteMember);
